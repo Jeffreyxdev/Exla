@@ -20,7 +20,7 @@ const App = () => {
       <Navbar/>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/discover-events" element={<Events/>} />
+        <Route path="/discover" element={<Events/>} />
         <Route path="/how-exla-works" element={<Guide/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/search" element={<Search />} />

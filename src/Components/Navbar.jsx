@@ -1,7 +1,8 @@
 import React, {useState} from 'react'
+import { IoSearch } from "react-icons/io5";
 import  { Link } from "react-router-dom";
 import { navlinks } from '../Constant';
-import { BiMenuAltRight } from 'react-icons/bi'
+import { IoIosMenu } from "react-icons/io";
 import { AiOutlineClose } from 'react-icons/ai'
 import { sideVariants, itemVariants } from '../Utils/Motion';
 import { AnimatePresence, motion } from "framer-motion";
@@ -45,16 +46,15 @@ const Navbar = () => {
         
         <h2>Exla</h2>
         </div>
-        <Link to={'/login'}>
-        <button className='w-[130px] h-[45px] rounded-[3px] border-[1px] mt-2'> Login </button>
-        </Link>
+        <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-147px",}}/>
+        
       </div>
      
-      <div className="w-[10%] pt-3  " onClick={handleMenuClick}>
+      <div className="w-[10%] pt-3  mt-0.5 " onClick={handleMenuClick}>
       {isMenuOpen ? (
-         <AiOutlineClose size='40px' cursor="pointer"  style={{color: '#000', }}  />
+         <AiOutlineClose size='40px' cursor="pointer"  style={{color: '#000', position:'relative', right:"-50px"}}  />
        ) : (
-        <BiMenuAltRight  size='40px' cursor="pointer"   style={{color: '#000'}} />
+        <IoIosMenu  size='40px' cursor="pointer"   style={{color: '#000', position:'relative', right:"-50px"}} />
        )}
       </div>
     </nav>
@@ -76,14 +76,14 @@ const Navbar = () => {
                   animate="open"
                   exit="closed"
                   variants={sideVariants}
-                  className="nav-container md:hidden border flex flex-col fixed text-white w-[55vw]  mt-[120px] h-[350px] justify-around items-end  pr-[18vw] ml-[28%] z-10 rounded-2xl pt-4 bg-[#181818]"
+                  className="nav-container md:hidden border flex flex-col fixed text-black w-[400px]  mt-[9vh] h-[650px] justify-around items-center  text-center z-10 rounded-2xl pt-4 bg-[#ffffff]"
                   >
                     <div className='flex flex-col   items-center w-[39%]' onClick={handleMenuClick}>
                         {
                           navlinks.map((link)=>{
                             return (
-                              <motion.div className="flex flex-col pr-7 text-[16px]" key={link.name}>
-                                  <Link to={link.url }>
+                              <motion.div className="flex flex-col  text-[18px]" key={link.name}>
+                                  <Link to={link.url }><hr className='bg-black w-[400px]'></hr><br/>
                                   <motion.div variants={itemVariants} className='list-none p-3'>{link.title}</motion.div>
                                   </Link>
                               </motion.div>
@@ -91,13 +91,25 @@ const Navbar = () => {
                           })
                         }
                     </div>
+                    <motion.div className='mt-[-7vh]'>
                     <motion.button
                     variants={itemVariants}
-                    className="w-[150px] h-[48px] text-black bg-white font-bold rounded-xl mb-7 text-[14px] mr-[-2.8em]"
+                    className="w-[133px] h-[46px] text-black bg-[#f52415] font-bold rounded-xl  text-[14px] mr-[-9.8em]  "
                     >
-                    Get Started
+                    Sign up
                     </motion.button>
 
+                    <Link to={'/login'}>
+                    <motion.button
+                    variants={itemVariants}
+                    className='w-[130px] h-[45px] 
+                    rounded-xl border-[1px] border-[#000]
+                    text-black bg-[#ffffff]  
+                    font-bold   text-[14px] 
+                    ml-[-10.8em]  mt-[-31px]align-top'> Login
+                    </motion.button>
+                    </Link>
+                    </motion.div>
                 </motion.div>
               </motion.aside>
             )

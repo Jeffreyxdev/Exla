@@ -1,15 +1,10 @@
 
 export const navlinks =[
-    {
-        name: "Home",
-        title: "Home",
-        url: '/'
-
-    },
+    
     {
         name: "Discover Events",
         title: "Discover Events",
-        url: '/discover-events',
+        url: '/discover',
     },
     {
         name: "How Elxa works",
