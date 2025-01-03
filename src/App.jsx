@@ -21,15 +21,15 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/discover-events" element={<Events/>} />
-        <Route path="/How-exla-works" element={<Guide/>} />
+        <Route path="/how-exla-works" element={<Guide/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/search" element={<Search />} />
         <Route path="/create-account" element={<Signup/>} />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/about-exla" element={<About/>} />
         <Route path="/communities" element={<Communities/>} />
-        <Route path="/Individual-signup" element={<Isignup />} />
-        <Route path="/Organizers-signup" element={<Osignup />} />
+        <Route path="/individual-signup" element={<Isignup />} />
+        <Route path="/organizers-signup" element={<Osignup />} />
 
         
 
