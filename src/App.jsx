@@ -10,7 +10,7 @@ import Pricing from './Pages/Pricing'
 import About from './Pages/About'
 import Communities from './Pages/Communities'
 import Navbar from './Components/Navbar'
-import Footer from './Components/Navbar'
+import Footer from './Components/Footer'
 import Isignup from './Pages/[Individual]/Signup'
 import Osignup from './Pages/[Organizers]/Signup'
 
