@@ -1,14 +1,48 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { IoSearch } from "react-icons/io5";
 import  { Link } from "react-router-dom";
 import { navlinks } from '../Constant';
 import { IoIosMenu } from "react-icons/io";
 import { AiOutlineClose } from 'react-icons/ai'
 import { IoIosSearch } from "react-icons/io";
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { sideVariants, itemVariants } from '../Utils/Motion';
 import { AnimatePresence, motion } from "framer-motion";
 const Navbar = () => {
-  
+  const auth = getAuth();
+  const db = getFirestore();
+  const [user, setUser] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState('https://via.placeholder.com/40');
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const userDoc = doc(db, 'users', currentUser.uid);
+        const userSnap = await getDoc(userDoc);
+        if (userSnap.exists()) {
+          setProfilePhoto(userSnap.data().photoURL || 'https://via.placeholder.com/40');
+        }
+      } else {
+        setUser(null);
+        setProfilePhoto('https://via.placeholder.com/40');
+      }
+    });
+    return () => unsubscribe();
+  }, [auth, db]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast.success('Successfully signed out!');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast.error('Failed to sign out.');
+    }
+  };
   const [isMenuOpen, setMenuOpen] = useState(false)
 
   //HANDLES OUR TOGGLING EVENT
@@ -34,11 +68,38 @@ const Navbar = () => {
           })}
         </div>
         <Link to={'/search'}>
-        <IoIosSearch  size='10px' className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-100px", top:'14px',}}/>
+        <IoIosSearch  size='10px' className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-80px", top:'14px',}}/>
         </Link>
+        
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+      {user ? (
+        <>
+        <Link to={'/profile'}>
+          <img
+            src={profilePhoto}
+            alt="Profile"
+            style={{ borderRadius: '50%', width: '40px', height: '40px', objectFit: 'cover', marginRight: '10px' }}
+          /></Link>
+          <button
+            onClick={handleSignOut}
+            className='
+            w-[80px] h-[32px]
+             rounded-xl border-[1px]
+              bg-[#f52] text-white font-semibold '
+          
+          >
+            Sign Out
+          </button>
+        </>
+      ) : (
         <Link to={'/login'}>
-      <button className='w-[100px] h-[35px] rounded-xl border-[1px] bg-[#f52] mt-3'>Login</button>
+      <button className=' w-[80px] h-[32px]
+             rounded-xl border-[1px]
+              bg-[#f52] text-white font-semibold mt-1'>Login</button>
       </Link>
+      )}
+    </div>
+    <ToastContainer />
       </nav>
 
       

@@ -44,7 +44,7 @@ const Signup = ({setIsAuth}) => {
 
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, { displayName: username }, {Name:firstName,lastName});
+      await updateProfile(user, { displayName: username });
       await sendEmailVerification(auth.currentUser)
       .then(()=>{
         toast.success("Email verification sent. Please check your email.");
