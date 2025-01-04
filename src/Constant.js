@@ -2,8 +2,8 @@
 export const navlinks =[
     
     {
-        name: "Discover Events",
-        title: "Discover Events",
+        name: "Discover events",
+        title: "Discover events",
         url: '/discover',
     },
     {
@@ -19,7 +19,7 @@ export const navlinks =[
     },
     {
         name: "About",
-        title: "About Exla",
+        title: "About",
         url: '/about-exla'
 
     },

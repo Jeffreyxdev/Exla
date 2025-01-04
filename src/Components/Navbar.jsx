@@ -4,6 +4,7 @@ import  { Link } from "react-router-dom";
 import { navlinks } from '../Constant';
 import { IoIosMenu } from "react-icons/io";
 import { AiOutlineClose } from 'react-icons/ai'
+import { IoIosSearch } from "react-icons/io";
 import { sideVariants, itemVariants } from '../Utils/Motion';
 import { AnimatePresence, motion } from "framer-motion";
 const Navbar = () => {
@@ -21,9 +22,9 @@ const Navbar = () => {
     
     <nav className='z-10 hidden md:flex lg:flex justify-around fixed w-full bg-[#ffffff]'>
       <Link to={'/'} className='w-[12%] h-12 cursor-pointer mt-1'>
-      <h2>Exla</h2>
+      <h2 className='mt-[8px] rubik-vinyl-regular ml-4' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder', fontFamily:'Rubik Vinyl'}}>Exla.</h2>
       </Link>
-      <div className='flex items-center justify-between lg:w-[30%] md:w-[40%]'>
+      <div className='flex items-center justify-between lg:w-[40%] md:w-[50%] mt-1'>
       {navlinks.map ((link, index)=> {
               return(
                   <div key={index}>
@@ -32,8 +33,11 @@ const Navbar = () => {
               )
           })}
         </div>
+        <Link to={'/search'}>
+        <IoIosSearch  size='10px' className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-100px", top:'14px',}}/>
+        </Link>
         <Link to={'/login'}>
-      <button className='w-[139px] h-[50px] rounded-[3px] border-[1px] mt-2'>Login</button>
+      <button className='w-[100px] h-[35px] rounded-xl border-[1px] mt-3'>Login</button>
       </Link>
       </nav>
 
@@ -43,11 +47,12 @@ const Navbar = () => {
       <div className='pt-5 px-2 flex justify-around'>
 
         <div className='w-[40%]'>
-        
-        <h2>Exla</h2>
-        </div>
+        <Link to={'/'}>
+        <h2 className='mt-[-9px]' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder'}}  >Exla</h2>
+        </Link></div>
+        <Link to={'/search'}>
         <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-147px",}}/>
-        
+        </Link>
       </div>
      
       <div className="w-[10%] pt-3  mt-0.5 " onClick={handleMenuClick}>
