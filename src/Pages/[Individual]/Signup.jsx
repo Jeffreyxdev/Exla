@@ -1,10 +1,11 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { motion } from "framer-motion";
 import GoogleBtn from "./GoogleBtn";
 import { auth, provider } from "../../Firebase/Firebase-config";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const initialState = {
   firstName: "",
   lastName:"",
@@ -43,7 +44,11 @@ const Signup = ({setIsAuth}) => {
 
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(user, { displayName: username });
+      await updateProfile(user, { displayName: username }, {Name:firstName,lastName});
+      await sendEmailVerification(auth.currentUser)
+      .then(()=>{
+        toast.success("Email verification sent. Please check your email.");
+      });
       toast.success("Signup successful");
       localStorage.setItem("isAuth", true);
       setIsAuth(true);
