@@ -24,7 +24,7 @@ const Navbar = () => {
       <Link to={'/'} className='w-[12%] h-12 cursor-pointer mt-1'>
       <h2 className='mt-[8px] rubik-vinyl-regular ml-4' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder', fontFamily:'Rubik Vinyl'}}>Exla.</h2>
       </Link>
-      <div className='flex items-center justify-between lg:w-[40%] md:w-[50%] mt-1'>
+      <div className='flex items-center justify-between lg:w-[40%] md:w-[50%] mt-2'>
       {navlinks.map ((link, index)=> {
               return(
                   <div key={index}>
@@ -37,7 +37,7 @@ const Navbar = () => {
         <IoIosSearch  size='10px' className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-100px", top:'14px',}}/>
         </Link>
         <Link to={'/login'}>
-      <button className='w-[100px] h-[35px] rounded-xl border-[1px] mt-3'>Login</button>
+      <button className='w-[100px] h-[35px] rounded-xl border-[1px] bg-[#f52] mt-3'>Login</button>
       </Link>
       </nav>
 
