@@ -48,10 +48,10 @@ const Navbar = () => {
 
         <div className='w-[40%]'>
         <Link to={'/'}>
-        <h2 className='mt-[-9px]' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder'}}  >Exla</h2>
+        <h2 className='mt-[-7px]  rubik-vinyl-regular' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder'}}  >Exla.</h2>
         </Link></div>
         <Link to={'/search'}>
-        <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-147px",}}/>
+        <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-149x",}}/>
         </Link>
       </div>
      
