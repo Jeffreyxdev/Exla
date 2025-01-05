@@ -102,7 +102,7 @@ const UserProfile = () => {
           style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover', marginBottom: '10px' }}
         />
         <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>{user.displayName || 'Anonymous User'}</h2>
-        </div><p>Email: {user.email}</p>
+        </div><p className='ml-10'> {user.email}</p>
         <p>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
 
         {!user.emailVerified && !verificationSent && (

@@ -112,8 +112,14 @@ const Navbar = () => {
         <h2 className='mt-[-7px]  rubik-vinyl-regular' style={{color: '#f52415', position:'relative', left:"-50px", fontSize:'28px', fontWeight:'bolder'}}  >Exla.</h2>
         </Link></div>
         <Link to={'/search'}>
-        <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-149x",}}/>
+        <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-160px",}}/>
         </Link>
+        <Link to={'/profile'}>
+          <img
+            src={profilePhoto}
+            alt="Profile"
+            style={{ borderRadius: '50%', width: '40px', height: '40px', objectFit: 'cover',position:'relative', right:"-70px", marginTop:'-4px' }}
+          /></Link>
       </div>
      
       <div className="w-[10%] pt-3  mt-0.5 " onClick={handleMenuClick}>
@@ -152,30 +158,46 @@ const Navbar = () => {
                                   <Link to={link.url }><hr className='bg-black w-[400px]'></hr><br/>
                                   <motion.div variants={itemVariants} className='list-none p-3'>{link.title}</motion.div>
                                   </Link>
+                                 
                               </motion.div>
                             )
                           })
                         }
                     </div>
                     <motion.div className='mt-[-7vh]'>
-                    <motion.button
-                    variants={itemVariants}
-                    className="w-[133px] h-[46px] text-black bg-[#f52415] font-bold rounded-xl  text-[14px] mr-[-9.8em]  "
-                    >
-                    Sign up
-                    </motion.button>
-
-                    <Link to={'/login'}>
-                    <motion.button
-                    variants={itemVariants}
-                    className='w-[130px] h-[45px] 
-                    rounded-xl border-[1px] border-[#000]
-                    text-black bg-[#ffffff]  
-                    font-bold   text-[14px] 
-                    ml-[-10.8em]  mt-[-31px]align-top'> Login
-                    </motion.button>
-                    </Link>
-                    </motion.div>
+                    
+                    {user ? (
+                        <>
+                      
+                          <motion.button
+                          variants={itemVariants}
+                          className="w-[80px] h-[32px]
+                          bg-[#f52415] 
+                            rounded-xl  
+                            text-[14px]  text-white 
+                            font-semibold
+                            "
+                            onClick={handleSignOut}
+                          
+                          
+                          >
+                            Sign Out
+                          </motion.button>
+                        </>
+                          ) : (
+                            <Link to={'/login'}>
+                          <motion.button 
+                          variants={itemVariants}
+                          className='w-[130px] h-[45px] 
+                          rounded-xl border-[1px] border-[#000]
+                        text-black bg-[#ffffff]  
+                          font-bold   text-[14px] 
+                          ml-[-10.8em]  mt-[-31px]align-top'>Login</motion.button>
+                          </Link>
+                   
+                   
+      )} </motion.div>
+       
                 </motion.div>
               </motion.aside>
             )
