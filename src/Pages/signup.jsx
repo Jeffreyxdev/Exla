@@ -78,7 +78,7 @@ const signup = () => {
             transition: 'transform 0.2s',
           }}
           onMouseEnter={(e) => {
-            e.currentTargetstyle.transform = 'scale(1.05)';
+            e.currentTarget.style.transform = 'scale(1.05)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
