@@ -114,6 +114,7 @@ const Navbar = () => {
         <Link to={'/search'}>
         <IoSearch  className='w-[40px] h-[30px]  '  style={{position:'relative', right:"-160px",}}/>
         </Link>
+        
         <Link to={'/profile'}>
           <img
             src={profilePhoto}

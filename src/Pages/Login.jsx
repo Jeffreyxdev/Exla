@@ -117,7 +117,7 @@ const Login = ({ setIsAuth }) => {
           <p className="text-xs md:text-sm font-normal text-black">
             Don't have an account?{" "}
             <Link
-              to="/create"
+              to="/create-account"
               className="font-semibold underline underline-offset-2 cursor-pointer"
             >
               Click here

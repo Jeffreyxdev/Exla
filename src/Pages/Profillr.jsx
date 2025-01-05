@@ -47,6 +47,35 @@ const UserProfile = () => {
       toast.success('Verification email sent!');
     }
   };
+  const handleAddTicket = async (e) => {
+    e.preventDefault();
+    const { eventName, eventDate, ticketPrice } = e.target.elements;
+
+    try {
+      await addDoc(collection(db, 'events'), {
+        userId: user.uid,
+        eventName: eventName.value,
+        eventDate: eventDate.value,
+        ticketPrice: ticketPrice.value,
+      });
+
+      toast.success('Event added successfully!');
+      setIsAdding(false);
+
+      // Refresh events
+      const eventsQuery = query(collection(db, 'events'), where('userId', '==', user.uid));
+      const eventsSnapshot = await getDocs(eventsQuery);
+      const userEvents = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setEvents(userEvents);
+    } catch (error) {
+      console.error('Error adding event:', error);
+      toast.error('Failed to add event.');
+    }
+  };
+
+  const handleAddToggle = () => {
+    setIsAdding(!isAdding);
+  };
 
   // Handle updating user profile
   const handleUpdateProfile = async (e) => {
@@ -99,7 +128,7 @@ const UserProfile = () => {
   }
 
   return (
-    <div style={{ maxWidth: '650px', margin: '0 auto', padding: '20px', }} className='pt-serif-regular'>
+    <div style={{ maxWidth: '650px', margin: '0 auto', padding: '20px', }}>
       <ToastContainer />
       <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>User Profile</h1>
       <div style={{ display: 'relative', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -151,7 +180,7 @@ const UserProfile = () => {
         }}
       >
         <h3 style={{ marginBottom: '10px' }}>Edit Profile</h3>
-      <form onSubmit={handleUpdateProfile} style={{ marginTop: '20px', textAlign: 'left' }}>
+      <form onSubmit={handleUpdateProfile} style={{ marginTop: '20px', textAlign: 'left', maxWidth:'700px' }}>
         <div style={{ marginBottom: '10px' }}>
           <label style={{ display: 'block', marginBottom: '5px' }}>Display Name:</label>
           <input
@@ -159,7 +188,7 @@ const UserProfile = () => {
             name="displayName"
             placeholder="Display Name"
             defaultValue={user.displayName}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '10px' }}
           />
         </div>
         <div style={{ marginBottom: '10px' }}>
@@ -168,19 +197,21 @@ const UserProfile = () => {
             type="file"
             accept="image/*"
             onChange={handlePhotoChange}
-            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+            style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '10px' }}
           />
         </div>
         <button
           type="submit"
           style={{
-            backgroundColor: '#28a745',
+            backgroundColor: '#f52415',
             color: '#fff',
-            border: 'none',
+           
+      
+            marginBottom:'10px',
             padding: '10px 20px',
-            borderRadius: '5px',
+            borderRadius: '15px',
             cursor: 'pointer',
-          }}
+          }} 
         >
           Update Profile
         </button>
@@ -188,13 +219,13 @@ const UserProfile = () => {
               type="button"
               onClick={handleEditToggle}
               style={{
-                backgroundColor: '#dc3545',
+                backgroundColor: '#4b5fc5',
                 color: '#fff',
                 border: 'none',
                 padding: '10px 20px',
-                borderRadius: '5px',
+                borderRadius: '15px',
                 cursor: 'pointer',
-                marginLeft: '10px',
+                marginLeft: '25px',
               }}
             >
               Cancel
@@ -215,7 +246,7 @@ const UserProfile = () => {
         ) : (
           <p style={{ textAlign: 'center', color: '#666',  margin:'40px'}}>You have not posted any events yet.</p>
         )}
-
+</div>
         <button
           style={{
             display: 'block',
@@ -232,7 +263,7 @@ const UserProfile = () => {
         >
           + Add Ticket
         </button>
-      </div>
+      
     </div>
     
   );
