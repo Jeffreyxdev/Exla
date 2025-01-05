@@ -91,20 +91,23 @@ const UserProfile = () => {
   }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+   <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <ToastContainer />
       <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>User Profile</h1>
-      <div style={{ display: 'relative', alignItems: 'center', justifyContent: 'space-between' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', textAlign: 'center' }}>
         <img
           src={photoPreview}
           alt="Profile"
           style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover', marginBottom: '10px' }}
         />
-        <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>{user.displayName || 'Anonymous User'}</h2>
-        </div><p>Email: {user.email}</p>
-        <p>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
-
+        <h2 style={{ fontSize: '20px', margin: '5px 0' }}>{user.displayName || 'Anonymous User'}</h2>
+        <p > {user.email}</p>
+        <p style={{ margin: '5px 0' }}>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
+        <FaPencilAlt
+          style={{ cursor: 'pointer', fontSize: '20px', color: '#007bff', marginTop: '10px' }}
+          onClick={handleEditToggle}
+        />
+      
         {!user.emailVerified && !verificationSent && (
           <button
             onClick={handleSendVerification}
@@ -123,10 +126,7 @@ const UserProfile = () => {
         )}
         {verificationSent && <p style={{ color: 'green', marginTop: '10px' }}>A verification email has been sent!</p>}
        
-      <FaPencilAlt
-          style={{ cursor: 'pointer', fontSize: '20px', color: '#007bff' }}
-          onClick={handleEditToggle}
-        />
+     
     </div>
       
       {isEditing && (
@@ -155,7 +155,7 @@ const UserProfile = () => {
           />
         </div>
         <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Profile Photo:</label>
+       
           <input
             type="file"
             accept="image/*"
