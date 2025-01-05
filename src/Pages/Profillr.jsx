@@ -1,7 +1,7 @@
 // Import necessary modules
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, sendEmailVerification, updateProfile } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
+import {getFirestore, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaPencilAlt } from 'react-icons/fa';
@@ -13,6 +13,7 @@ const UserProfile = () => {
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [userEvents, setUserEvents] = useState([]);
   // Fetch user information on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -25,7 +26,14 @@ const UserProfile = () => {
         } else {
           setPhotoPreview('https://via.placeholder.com/150');
         }
-      }
+      
+       // Fetch events created by the user
+       const eventsRef = collection(db, 'events');
+       const q = query(eventsRef, where('createdBy', '==', currentUser.uid));
+       const querySnapshot = await getDocs(q);
+       const events = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+       setUserEvents(events);
+     }
     });
 
     return () => unsubscribe();
@@ -91,23 +99,20 @@ const UserProfile = () => {
   }
 
   return (
-   <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+    <div style={{ maxWidth: '650px', margin: '0 auto', padding: '20px', }} className='pt-serif-regular'>
       <ToastContainer />
       <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>User Profile</h1>
-      <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', textAlign: 'center' }}>
+      <div style={{ display: 'relative', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
           src={photoPreview}
           alt="Profile"
           style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover', marginBottom: '10px' }}
         />
-        <h2 style={{ fontSize: '20px', margin: '5px 0' }}>{user.displayName || 'Anonymous User'}</h2>
-        <p > {user.email}</p>
-        <p style={{ margin: '5px 0' }}>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
-        <FaPencilAlt
-          style={{ cursor: 'pointer', fontSize: '20px', color: '#007bff', marginTop: '10px' }}
-          onClick={handleEditToggle}
-        />
-      
+        <h2 style={{ fontSize: '20px', marginBottom: '15px', marginLeft:'5px',marginTop:'-20px', fontWeight:'bold' }}>{user.displayName || 'Anonymous User'}</h2>
+        </div><p className='ml-[110px] mt-[-8.5vh]  ' style={{fontSize:"13px"}}> {user.email}</p>
+        <p className='ml-[110px]'style={{fontSize:"13px"}}>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
+
         {!user.emailVerified && !verificationSent && (
           <button
             onClick={handleSendVerification}
@@ -126,7 +131,10 @@ const UserProfile = () => {
         )}
         {verificationSent && <p style={{ color: 'green', marginTop: '10px' }}>A verification email has been sent!</p>}
        
-     
+      <FaPencilAlt
+          style={{ cursor: 'pointer', fontSize: '16px', color: '#000', marginLeft:'313px', marginTop:'-10vh' }}
+          onClick={handleEditToggle}
+        />
     </div>
       
       {isEditing && (
@@ -155,7 +163,7 @@ const UserProfile = () => {
           />
         </div>
         <div style={{ marginBottom: '10px' }}>
-       
+          <label style={{ display: 'block', marginBottom: '5px' }}>Profile Photo:</label>
           <input
             type="file"
             accept="image/*"
@@ -193,7 +201,40 @@ const UserProfile = () => {
             </button>
       </form>
     </div>)}
+    <div style={{ marginTop: '140px',  maxHeight:'600px' }}>
+        <h2 style={{ fontSize: '20px', marginBottom: '20px', textAlign: 'center',  fontFamily:'cursive'}}>Your Events</h2>
+        {userEvents.length > 0 ? (
+          <ul style={{ listStyleType: 'none', padding: 0 }}>
+            {userEvents.map(event => (
+              <li key={event.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
+                <h3 style={{ margin: '0 0 5px', fontSize: '16px' }}>{event.title}</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>{event.date}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ textAlign: 'center', color: '#666',  margin:'40px'}}>You have not posted any events yet.</p>
+        )}
+
+        <button
+          style={{
+            display: 'block',
+            margin: '20px auto 0',
+            backgroundColor: '#ff9800',
+            color: '#fff',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            fontSize: '16px'
+          }}
+          onClick={() => toast.info('Add event functionality coming soon!')}
+        >
+          + Add Ticket
+        </button>
+      </div>
     </div>
+    
   );
 };
 
