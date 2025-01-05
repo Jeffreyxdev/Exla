@@ -74,7 +74,7 @@ const signup = () => {
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
             textAlign: 'center',
             backgroundColor: '#fff',
-            width: '20px',
+            width: '200px',
             transition: 'transform 0.2s',
           }}
           onMouseEnter={(e) => {
