@@ -94,7 +94,7 @@ const UserProfile = () => {
     <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <ToastContainer />
       <h1 style={{ fontSize: '24px', marginBottom: '20px' }}>User Profile</h1>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ display: 'relative', alignItems: 'center', justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <img
           src={photoPreview}
@@ -102,7 +102,7 @@ const UserProfile = () => {
           style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover', marginBottom: '10px' }}
         />
         <h2 style={{ fontSize: '20px', marginBottom: '10px' }}>{user.displayName || 'Anonymous User'}</h2>
-        <p>Email: {user.email}</p>
+        </div><p>Email: {user.email}</p>
         <p>Status: {user.emailVerified ? 'Verified' : 'Not Verified'}</p>
 
         {!user.emailVerified && !verificationSent && (
@@ -122,11 +122,12 @@ const UserProfile = () => {
           </button>
         )}
         {verificationSent && <p style={{ color: 'green', marginTop: '10px' }}>A verification email has been sent!</p>}
-        </div>
+       
       <FaPencilAlt
           style={{ cursor: 'pointer', fontSize: '20px', color: '#007bff' }}
           onClick={handleEditToggle}
-        /></div>
+        />
+    </div>
       
       {isEditing && (
         <div
