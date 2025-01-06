@@ -6,4 +6,4 @@ const About = () => {
   )
 }
 
-export default Abou
+export default About
