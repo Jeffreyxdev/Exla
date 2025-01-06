@@ -84,7 +84,7 @@ const signup = () => {
             e.currentTarget.style.transform = 'scale(1)';
           }}
         ><Link to={'/individual-signup'}>
-          <FaBuilding size={0} color="#2196F3" />
+          <FaBuilding size={50} color="#2196F3" />
           <h3 style={{ fontSize: '20px', marginTop: '10px' }}>Organization</h3>
           <p style={{ color: '#555', fontSize: '14px' }}>Sign up for business use</p>
           </Link>
