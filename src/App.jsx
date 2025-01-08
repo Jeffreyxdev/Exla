@@ -26,7 +26,7 @@ const App = () => {
     signOut(auth).then(() => {
       localStorage.clear();
       setIsAuth(false);
-    window.location.pathname = "/login"
+    windo.location.pathname = "/login"
     })
   }
 
