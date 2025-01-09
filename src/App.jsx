@@ -14,7 +14,7 @@ import Footer from './Components/Footer'
 import Isignup from './Pages/[Individual]/Signup'
 import Osignup from './Pages/[Organizers]/Signup'
 import { signOut } from "firebase/auth";
-
+o
 import { auth } from "./Firebase/Firebase-config";
 import { ToastContainer } from "react-toastify"
 import "react-toastify/ReactToastify.css"
