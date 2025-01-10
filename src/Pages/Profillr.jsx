@@ -204,7 +204,7 @@ const UserProfile = () => {
           type="submit"
           style={{
             backgroundColor: '#f52415',
-            color: '#fff'
+            color: '#fff',
             marginBottom:'10px',
             padding: '10px 20px',
             borderRadius: '15px',
