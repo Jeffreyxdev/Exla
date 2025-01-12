@@ -14,6 +14,8 @@ const UserProfile = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [userEvents, setUserEvents] = useState([]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [containerStyle, setContainerStyle] = useState({ background: '#fff' });
   // Fetch user information on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -49,15 +51,29 @@ const UserProfile = () => {
   };
   const handleAddTicket = async (e) => {
     e.preventDefault();
-    const { eventName, eventDate, ticketPrice } = e.target.elements;
+    const { eventName, eventDate, ticketPrice, eventImage } = e.target.elements;
+
+    const selectedDate = new Date(eventDate.value);
+    const today = new Date();
+    if (selectedDate < today.setHours(0, 0, 0, 0)) {
+      toast.error('Event date cannot be in the past.');
+      return;
+    }
 
     try {
-      await addDoc(collection(db, 'events'), {
+      const eventData = {
         userId: user.uid,
         eventName: eventName.value,
         eventDate: eventDate.value,
         ticketPrice: ticketPrice.value,
+        eventImage: eventImage.files[0] ? URL.createObjectURL(eventImage.files[0]) : null,
+      };
+
+      setContainerStyle({
+        background: `url(${eventData.eventImage}) no-repeat center/cover`,
       });
+
+      await addDoc(collection(db, 'events'), eventData);
 
       toast.success('Event added successfully!');
       setIsAdding(false);
@@ -77,6 +93,9 @@ const UserProfile = () => {
     setIsAdding(!isAdding);
   };
 
+  if (!user) {
+    return <div>Loading...</div>;
+  }
   // Handle updating user profile
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -230,22 +249,39 @@ const UserProfile = () => {
             </button>
       </form>
     </div>)}
-    <div style={{ marginTop: '140px',  maxHeight:'600px' }}>
-        <h2 style={{ fontSize: '20px', marginBottom: '20px', textAlign: 'center',  fontFamily:'cursive'}}>Your Events</h2>
-        {userEvents.length > 0 ? (
-          <ul style={{ listStyleType: 'none', padding: 0 }}>
-            {userEvents.map(event => (
-              <li key={event.id} style={{ marginBottom: '10px', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
-                <h3 style={{ margin: '0 0 5px', fontSize: '16px' }}>{event.title}</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>{event.date}</p>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p style={{ textAlign: 'center', color: '#666',  margin:'40px'}}>You have not posted any events yet.</p>
-        )}
-</div>
+    <div style={{ marginTop: '30px' }}>
+    <h2 style={{ fontSize: '18px', marginBottom: '10px' }}>Your Events</h2>
+    <div style={{ padding: '20px', borderRadius: '8px', background: '#f9f9f9', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      {events.length > 0 ? (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {events.map(event => (
+            <li
+              key={event.id}
+              style={{
+                marginBottom: '10px',
+                border: '1px solid #ccc',
+                padding: '10px',
+                borderRadius: '5px',
+                background: event.eventImage
+                  ? `url(${event.eventImage}) no-repeat center/cover`
+                  : '#fff',
+              }}
+            >
+              <strong>{event.eventName}</strong>
+              <p>Date: {event.eventDate}</p>
+              <p>Price: ${event.ticketPrice}</p>
+              {event.eventImage && <img src={event.eventImage} alt="Event" style={{ width: '100%', borderRadius: '5px' }} />}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No events posted yet.</p>
+      )}
+    </div>
+  </div>
+
         <button
+        onClick={{handleAddToggle}}
           style={{
             display: 'block',
             margin: '20px auto 0',
@@ -257,10 +293,91 @@ const UserProfile = () => {
             cursor: 'pointer',
             fontSize: '16px'
           }}
-          onClick={() => toast.info('Add event functionality coming soon!')}
+          
         >
           + Add Ticket
         </button>
+        {isAdding && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: '#fff',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          <h3 style={{ marginBottom: '10px' }}>Create Ticket</h3>
+          <form onSubmit={handleAddTicket}>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Event Name:</label>
+              <input
+                type="text"
+                name="eventName"
+                placeholder="Event Name"
+                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+              />
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Event Date:</label>
+              <input
+                type="date"
+                name="eventDate"
+                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+              />
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Ticket Price:</label>
+              <input
+                type="number"
+                name="ticketPrice"
+                placeholder="Ticket Price"
+                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+              />
+            </div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Event Image:</label>
+              <input
+                type="file"
+                name="eventImage"
+                accept="image/*"
+                style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: '#28a745',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+              }}
+            >
+              Add Event
+            </button>
+            <button
+              type="button"
+              onClick={handleAddToggle}
+              style={{
+                backgroundColor: '#dc3545',
+                color: '#fff',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginLeft: '10px',
+              }}
+            >
+              Cancel
+            </button>
+          </form>
+        </div>
+        )}
       
     </div>
     
