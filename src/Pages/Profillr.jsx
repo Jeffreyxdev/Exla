@@ -1,19 +1,20 @@
 // Import necessary modules
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, sendEmailVerification, updateProfile } from 'firebase/auth';
-import {getFirestore, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import {getFirestore, doc, getDoc, collection, query, where, getDocs, addDocs } from 'firebase/firestore';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaPencilAlt } from 'react-icons/fa';
 const UserProfile = () => {
   const auth = getAuth();
   const db = getFirestore();
+  const [events, setEvents] = useState([]);
   const [user, setUser] = useState(null);
   const [verificationSent, setVerificationSent] = useState(false);
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [userEvents, setUserEvents] = useState([]);
+
   const [isAdding, setIsAdding] = useState(false);
   
   const [containerStyle, setContainerStyle] = useState({ background: '#fff' });
@@ -29,7 +30,12 @@ const UserProfile = () => {
         } else {
           setPhotoPreview('https://via.placeholder.com/150');
         }
-      
+      if (currentUser){
+        const eventsQuery = query(collection(db, 'events'), where('userId', '==', currentUser.uid));
+        const eventsSnapshot = await getDocs(eventsQuery);
+        const userEvents = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setEvents(userEvents);
+      }
        // Fetch events created by the user
        const eventsRef = collection(db, 'events');
        const q = query(eventsRef, where('createdBy', '==', currentUser.uid));
@@ -282,7 +288,7 @@ const UserProfile = () => {
   </div>
 
         <button
-        onClick={{handleAddToggle}}
+        onClick={handleAddToggle}
           style={{
             display: 'block',
             margin: '20px auto 0',
