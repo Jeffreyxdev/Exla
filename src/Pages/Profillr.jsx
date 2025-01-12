@@ -1,7 +1,7 @@
 // Import necessary modules
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, sendEmailVerification, updateProfile } from 'firebase/auth';
-import {getFirestore, doc, getDoc, collection, query, where, getDocs, addDocs } from 'firebase/firestore';
+import {getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaPencilAlt } from 'react-icons/fa';
@@ -17,7 +17,10 @@ const UserProfile = () => {
 
   const [isAdding, setIsAdding] = useState(false);
   
-  const [containerStyle, setContainerStyle] = useState({ background: '#fff' });
+  const [containerStyle, setContainerStyle] = useState([{  background: 'linear-gradient(to right, #ff7e5f, #feb47b)',webkitBackgroundClip: 'text',
+    webkitTextFillColor: 'transparent',
+    filter: 'blur(2px)' }]);
+
   // Fetch user information on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -78,6 +81,8 @@ const UserProfile = () => {
 
       setContainerStyle({
         background: `url(${eventData.eventImage}) no-repeat center/cover`,
+        backgroundSize: 'cover',
+        maxHeight:'200px'
       });
 
       await addDoc(collection(db, 'events'), eventData);
@@ -257,36 +262,50 @@ const UserProfile = () => {
       </form>
     </div>)}
     <div style={{ marginTop: '30px' }}>
-    <h2 style={{ fontSize: '18px', marginBottom: '10px' }}>Your Events</h2>
-    <div style={{ padding: '20px', borderRadius: '8px', background: '#f9f9f9', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-      {events.length > 0 ? (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {events.map(event => (
-            <li
-              key={event.id}
-              style={{
-                marginBottom: '10px',
-                border: '1px solid #ccc',
-                padding: '10px',
-                borderRadius: '5px',
-                background: event.eventImage
-                  ? `url(${event.eventImage}) no-repeat center/cover`
-                  : '#fff',
-              }}
-            >
-              <strong>{event.eventName}</strong>
-              <p>Date: {event.eventDate}</p>
-              <p>Price: ${event.ticketPrice}</p>
-              {event.eventImage && <img src={event.eventImage} alt="Event" style={{ width: '100%', borderRadius: '5px' }} />}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No events posted yet.</p>
-      )}
-    </div>
+  <h2 style={{ fontSize: '18px', marginBottom: '10px' }}>Your Events</h2>
+  <div style={{ padding: '20px', borderRadius: '8px', background: '#f9f9f9', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+    {events.length > 0 ? (
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {events.map(event => (
+          <li
+            key={event.id}
+            style={{
+              marginBottom: '10px',
+              border: '1px solid #ccc',
+              padding: '10px',
+              borderRadius: '5px',
+              background: 
+                
+              '#fff',
+              backgroundSize: 'cover',
+             
+            }}
+          >
+            
+            {event.eventImage && (
+              <img
+                src={event.eventImage}
+                alt="Event"
+                style={{
+                  width: '100%',
+                  maxWidth: '140px',
+                  maxHeight: '140px',
+                  borderRadius: '5px',
+                  objectFit: 'cover',
+                }}
+              />
+            )}
+            <strong>{event.eventName}</strong>
+            <p>Date: {event.eventDate}</p>
+            <p>Price: ₦{event.ticketPrice}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p>No events posted yet.</p>
+    )}
   </div>
-
+</div>
         <button
         onClick={handleAddToggle}
           style={{
@@ -337,10 +356,10 @@ const UserProfile = () => {
               />
             </div>
             <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Ticket Price:</label>
-              <input
+              <label style={{ display: 'block', marginBottom: '5px' }}>Ticket Price (₦):</label>
+              <input 
                 type="number"
-                name="ticketPrice"
+                name="ticketPrice ₦"
                 placeholder="Ticket Price"
                 style={{ width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' }}
               />
