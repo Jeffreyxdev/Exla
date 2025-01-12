@@ -15,6 +15,7 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userEvents, setUserEvents] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
+  
   const [containerStyle, setContainerStyle] = useState({ background: '#fff' });
   // Fetch user information on mount
   useEffect(() => {

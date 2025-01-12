@@ -9,7 +9,7 @@ import { FaPencilAlt } from 'react-icons/fa';
 const Events = () => {
   const auth = getAuth();
   const db = getFirestore();
-  
+  const [user, setUser] = useState(null)
   const [events, setEvents] = useState([]);
  
   const [containerStyle, setContainerStyle] = useState([{  background: 'linear-gradient(to right, #ff7e5f, #feb47b)',webkitBackgroundClip: 'text',
