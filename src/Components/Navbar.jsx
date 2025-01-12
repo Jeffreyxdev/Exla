@@ -117,6 +117,7 @@ const Navbar = () => {
         
         <Link to={'/profile'}>
           <img
+       
             src={profilePhoto}
             alt="Profile"
             style={{ borderRadius: '50%', width: '40px', height: '40px', objectFit: 'cover',position:'relative', right:"-70px", marginTop:'-4px' }}
