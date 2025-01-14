@@ -1,7 +1,7 @@
 // Import necessary modules
 import React, { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged, sendEmailVerification, updateProfile } from 'firebase/auth';
-import {getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
+import {getFirestore, doc, getDoc, collection, query, where, getDocs, addDoc , deleteDoc} from 'firebase/firestore';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaPencilAlt } from 'react-icons/fa';
@@ -40,11 +40,7 @@ const UserProfile = () => {
         setEvents(userEvents);
       }
        // Fetch events created by the user
-       const eventsRef = collection(db, 'events');
-       const q = query(eventsRef, where('createdBy', '==', currentUser.uid));
-       const querySnapshot = await getDocs(q);
-       const events = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-       setUserEvents(events);
+     
      }
     });
 
@@ -144,6 +140,23 @@ const UserProfile = () => {
     }
   };
 
+  const handleDeleteEvent = async (eventId) => {
+    if (toast.confirm('Are you sure you want to delete this event?')) {
+      try {
+        const eventDoc = doc(db, 'events', eventId);
+        await deleteDoc(eventDoc);
+  
+        // Update the events state after deletion
+        setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+  
+        toast.success('Event deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        toast.error('Failed to delete event.');
+      }
+    }
+  };
+  
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -298,6 +311,20 @@ const UserProfile = () => {
             <strong>{event.eventName}</strong>
             <p>Date: {event.eventDate}</p>
             <p>Price: ₦{event.ticketPrice}</p>
+            <button
+                onClick={() => handleDeleteEvent(event.id)}
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  marginTop: '10px',
+                }}
+              >
+                Delete
+              </button>
           </li>
         ))}
       </ul>
@@ -356,7 +383,7 @@ const UserProfile = () => {
               />
             </div>
             <div style={{ marginBottom: '10px' }}>
-              <label style={{ display: 'block', marginBottom: '5px' }}>Ticket Price (₦):</label>
+              <label style={{ display: 'block', marginBottom: '5px' }}>Ticket Price:</label>
               <input 
                 type="number"
                 name="ticketPrice ₦"
